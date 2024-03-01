@@ -6,15 +6,16 @@ templ Graph() {
 		<canvas id="realtimeChart"></canvas>
 	</div>
 	<script>
-    let lastFetchTime = 0;
+
+    var dadosTemp;
 
     async function fetchData() {
-        var currentTime = Date.now();
-        if (currentTime - lastFetchTime > 10000){
+                
         const response = await fetch("http://localhost:3000/dados");
         const dados = await response.json();
-        carregaChart(dados)
-        }
+        carregaChart(dados);
+        dadosTemp = dados;
+
     }
 
     async function carregaChart (dados) {
@@ -39,8 +40,6 @@ templ Graph() {
         myChart.data.datasets[0].data = temperaturaAmbienteData;
         myChart.data.datasets[1].data = temperaturaRecipienteData;
         myChart.update();
-
-        lastFetchTime = currentTime;
     }
 
     // Definir o gráfico dentro da função fetch, após as variáveis estarem definidas
