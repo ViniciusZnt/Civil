@@ -1,0 +1,65 @@
+package templates
+
+templ Sampling() {
+	<html>
+		<script src="../path/to/flowbite/dist/datepicker.js"></script>
+		<div class="flex justify-center">
+			<h2 class="text-2xl font-bold mb-4 font-body">Selecione o Intervalo de Datas</h2>
+		</div>
+		<form id="dateRangeForm" class="space-y-4">
+			<div>
+				<label for="startDate" class="block font-medium font-body">Data de Início:</label>
+				<input type="date" id="startDate" name="startDate" min="2023-10-16" value="2023-10-16" class="border rounded-md p-2 w-full text-white bg-black bg-opacity-80"/>
+				<label for="endDate" class="block font-body">Data de Término:</label>
+				<input type="date" id="endDate" name="endDate" min="2023-10-16" value="2023-10-16" class="border rounded-md p-2 w-full text-white bg-black bg-opacity-80"/>
+				<button type="submit" class="my-button">Aplicar Filtro</button>
+			</div>
+		</form>
+	</html>
+	// <script>
+	//     document.getElementById("dateRangeForm").addEventListener("submit", function(event) {
+	//         event.preventDefault(); 
+	//         applyFilter();
+	//     });
+	//     document.getElementById("startDate").addEventListener("change", applyFilter);
+	//     document.getElementById("endDate").addEventListener("change", applyFilter);
+	//     function applyFilter() {
+	//         var startDate = document.getElementById("startDate").value;
+	//         var endDate = document.getElementById("endDate").value;
+	//         console.log(endDate);
+	//         // Lógica para aplicar o filtro com base nas datas selecionadas
+	//         fetchData(startDate, endDate);
+	//     }
+	//     async function fetchData(startDate, endDate) {
+	//         const response = await fetch("http://localhost:3000/dados");
+	//         const dados = await response.json();
+	//         const tempoAtual = [];
+	//         dados.forEach(objeto => {
+	//             const tempo_Atual = objeto.tempo_atual;
+	//             tempoAtual.push(tempo_Atual);
+	//         });
+	//         let partes = []; 
+	//         tempoAtual.forEach(time => {
+	//             const parte = time.split(" ");
+	//             partes.push(parte[0]);
+	//         });
+	// 		console.log(partes);
+	//         const isWithinRange = checkWithinRange(partes, startDate, endDate,dados);
+	//         console.log("Está dentro do intervalo?", isWithinRange);
+	//     }
+	//     function filtrarDados(startDate, endDate){
+	//         dados
+	//     }
+	//     let dadosFiltrados = []
+	//     function checkWithinRange(partes, startDate, endDate,dadosFiltrados) {
+	//         for (let i = 0; i < partes.length; i++) {
+	//             if (partes[i] >= startDate && partes[i] <= endDate) {
+	//                 carregaChart(dadosFiltrados);
+	//             }
+	//         }
+	//         return false; // Se nenhuma data estiver dentro do intervalo, retorna false
+	//     }
+	//     fetchData(); 
+	//     setInterval(fetchData, 10000);
+	// </script>
+}

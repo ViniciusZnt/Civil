@@ -1,0 +1,90 @@
+package templates
+
+templ Graph() {
+	<div class="chart-container" style="position: relative; height: 80vh; width: 99vw;">
+		//Responsive
+		<canvas id="realtimeChart"></canvas>
+	</div>
+	<script>
+    let lastFetchTime = 0;
+
+    async function fetchData() {
+        var currentTime = Date.now();
+        if (currentTime - lastFetchTime > 10000){
+        const response = await fetch("http://localhost:3000/dados");
+        const dados = await response.json();
+        carregaChart(dados)
+        }
+    }
+
+    async function carregaChart (dados) {
+
+        const labels = [];
+        const temperaturaAmbienteData = [];
+        const temperaturaRecipienteData = [];
+        
+        dados.forEach(objeto => {
+            // Extrai as informações relevantes de cada objeto
+            const temperaturaAmbiente = parseFloat(objeto.temperatura_ambiente);
+            const temperaturaRecipiente = parseFloat(objeto.temperatura_recipiente);
+            const tempoAtual = objeto.tempo_atual;
+                
+            // Adiciona as informações aos arrays de dados do gráfico
+            labels.push(tempoAtual);
+            temperaturaAmbienteData.push(temperaturaAmbiente);
+            temperaturaRecipienteData.push(temperaturaRecipiente);
+        });
+
+        myChart.data.labels = labels;
+        myChart.data.datasets[0].data = temperaturaAmbienteData;
+        myChart.data.datasets[1].data = temperaturaRecipienteData;
+        myChart.update();
+
+        lastFetchTime = currentTime;
+    }
+
+    // Definir o gráfico dentro da função fetch, após as variáveis estarem definidas
+    var ctx = document.getElementById('realtimeChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: [0, 100],
+            datasets: [{
+                fill: {
+                    target:'origin',
+                    above:'rgb(0,255,0,0.2)',
+                    below:'rgb(0,255,0,0.2)'
+                },
+                label: 'Temperature Ambiente',
+                data: [],
+                backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                borderColor: 'rgba(76, 233, 18, 0.8)',
+                borderWidth: 3
+            }, {
+                fill: {
+                    target:'origin',
+                    above:'rgb(0,0,255,0.2)',
+                    below:'rgb(0,0,255,0.2)'
+                },
+                label: 'Temperature Recipiente',
+                data: [],
+                backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                borderColor: 'rgb(26 ,48, 187, 0.8)',
+                borderWidth: 3
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    fetchData();
+    setInterval(fetchData,10000);
+    </script>
+}
