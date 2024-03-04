@@ -1,5 +1,13 @@
 package templates
 
+type Dados struct {
+	ID                    int    `json:"id"`
+	TemperaturaAmbiente   string `json:"temperatura_ambiente"`
+	TemperaturaRecipiente string `json:"temperatura_recipiente"`
+	Humidade              string `json:"humidade"`
+	TempoAtual            string `json:"tempo_atual"`
+}
+
 templ Sampling() {
 	<html>
 		<div class="flex justify-center">
@@ -20,17 +28,20 @@ templ Sampling() {
 				transformDataInArray();
 			})
 
+			let tempAtual = [];
+			let arrayFiltrado = []; 
+			let partes = [];
+			let dadosFiltrados = [];
+			let dadosFinais = []
+
 			function transformDataInArray() {
 				var startDate = document.getElementById("startDate").value;
 				var endDate = document.getElementById("endDate").value;
 
-				console.log(startDate)
-				console.log(endDate)
+				console.log(startDate);
+				console.log(endDate);
 
 				// filtra dados inicio e fim
-				let tempAtual = [];
-				let arrayFiltrado = []; 
-			
 
 				dadosTemp.forEach(objeto => {
 					tempAtual.push(objeto.tempo_atual)
@@ -39,6 +50,7 @@ templ Sampling() {
 				tempAtual.forEach(tempo => {
 					const parte = tempo.split(" ");
 					arrayFiltrado.push(parte[0]);
+					partes.push(parte[1]);
 				});
 
 				applyFilter(arrayFiltrado, startDate, endDate)
@@ -49,26 +61,42 @@ templ Sampling() {
 				// dadosTemp <- aplicar filtro
 				// recarregar o gráfico com o novo array
 			
-				let dadosFiltrados = []
 				for (let i = 0; i < arrayFiltrado.length; i++) {
 					
 					if (arrayFiltrado[i] >= startDate && arrayFiltrado[i] <= endDate) {
-						dadosFiltrados.push(arrayFiltrado[i]);
-						// console.log(arrayFiltrado[i])
+						//Se ele estiver no intervalo depois do filtro ele deve adcionar o tempo
+						//novamente na array voltando para o padrão anterior de data tempo,
+						dadosFiltrados[i] = arrayFiltrado[i] + partes[i];
+
 					}
 				}
-				console.log(dadosFiltrados)
-				// atualiza o gráfico
 
-				
+				//////
+				console.log(dadosFiltrados);
+				console.log (tempAtual);
+				// partes.forEach(vezes =>{
+				// 	dadosFiltrados[vezes] += vezes;
+				// })
+				for (let i = 0; i < dadosFiltrados.length; i++){
+					dadosFiltrados[i] += partes[i]
+				}
+				console.log(dadosFinais);
 
-				let dadosFinais = []
+
+
+				// atualiza o gráfico				
+
+				////
 				dadosTemp.forEach(objeto =>{
 					for(i=0;i<dadosFiltrados.length;i++){
 						if(dadosTemp.tempo_atual == dadosFiltrados[i]){
 							//TODO Transformar esses dados em uma estruturar e chamar a fun
 							//ção carrega Chart porque ela aceita uma array com objetos
 							//dadosFinais.
+							let vezes;
+							dadosTemp.tempo_atual = dadosFiltrados[i];
+							console.log(vezes);
+							vezes++;
 						}
 					}
 				})
